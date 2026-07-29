@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { section } from "framer-motion/client";
 import { ArrowRight, PlayCircle, Settings, Clock4, Droplets, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 
