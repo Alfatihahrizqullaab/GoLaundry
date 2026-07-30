@@ -3,6 +3,7 @@ import { HeroSection } from '../../features/landing/HeroSection/HeroSection';
 import { FeatureSection } from '../../features/landing/FeatureSection/FeatureSection';
 import { HowItWorksSection } from '../../features/landing/HowItWorksSection/HowItWorksSection';
 import { PricingSection } from '../../features/landing/PricingSection/PricingSection';
+import { TestimonialsSection } from '../../features/landing/TestimonialSection/TestimonialSection';
 
 const LandingPage: React.FC = () => {
   return (
@@ -11,6 +12,7 @@ const LandingPage: React.FC = () => {
       <FeatureSection></FeatureSection>
       <HowItWorksSection></HowItWorksSection>
       <PricingSection></PricingSection>
+      <TestimonialsSection></TestimonialsSection>
     </main>
   );
 };
