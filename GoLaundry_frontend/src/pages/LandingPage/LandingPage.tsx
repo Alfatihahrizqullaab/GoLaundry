@@ -4,6 +4,7 @@ import { FeatureSection } from '../../features/landing/FeatureSection/FeatureSec
 import { HowItWorksSection } from '../../features/landing/HowItWorksSection/HowItWorksSection';
 import { PricingSection } from '../../features/landing/PricingSection/PricingSection';
 import { TestimonialsSection } from '../../features/landing/TestimonialSection/TestimonialSection';
+import { FAQSection } from '../../features/landing/FAQSection/FAQSection';
 
 const LandingPage: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ const LandingPage: React.FC = () => {
       <HowItWorksSection></HowItWorksSection>
       <PricingSection></PricingSection>
       <TestimonialsSection></TestimonialsSection>
+      <FAQSection></FAQSection>
     </main>
   );
 };
