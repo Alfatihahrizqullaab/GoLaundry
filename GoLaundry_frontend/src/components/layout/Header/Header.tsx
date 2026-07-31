@@ -1,17 +1,88 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeMenu = () => setIsMenuOpen(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Mengecek apakah kita sedang berada di halaman utama
+  const isHomePage = location.pathname === '/';
+
+  const [activeSection, setActiveSection] = useState('beranda');
+
+  const navItems = [
+    { name: 'Beranda', id: 'beranda' },
+    { name: 'Fitur', id: 'fitur' },
+    { name: 'Cara Kerja', id: 'cara-kerja' },
+    { name: 'Paket Langganan', id: 'paket' },
+    { name: 'FAQ', id: 'faq' },
+  ];
+
+  useEffect(() => {
+    if (!isHomePage) return;
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    navItems.forEach((item) => {
+      const element = document.getElementById(item.id);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isHomePage, navItems]);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    setActiveSection(id);
+
+    if (isHomePage) {
+      e.preventDefault();
+      const element = document.getElementById(id);
+      
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.history.pushState(null, '', `/#${id}`);
+      }
+    }
+    closeMenu();
+  };
+
+  useEffect(() => {
+    if (isHomePage) {
+      const hash = location.hash.replace('#', '');
+      if (hash) {
+        setActiveSection(hash);
+      } else {
+         setActiveSection('beranda');
+      }
+    }
+  }, [isHomePage, location.hash]);
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           
-          {/* Logo - Disesuaikan ukurannya untuk tablet */}
           <div className="flex items-center gap-2 shrink-0">
             <div className="w-8 h-8 lg:w-10 lg:h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white">
               <svg className="w-5 h-5 lg:w-6 lg:h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -23,29 +94,38 @@ const Header = () => {
             </span>
           </div>
 
-          {/* Nav Links (Tablet & Desktop) */}
-          {/* md:space-x-4 untuk tablet, lg:space-x-8 untuk desktop */}
+          {/* Nav Links (Desktop) */}
           <nav className="hidden md:flex md:space-x-4 lg:space-x-8">
-            <a href="#beranda" className="text-gray-900 font-medium text-sm lg:text-base">Beranda</a>
-            <a href="#fitur" className="text-gray-500 hover:text-gray-900 text-sm lg:text-base">Fitur</a>
-            <a href="#cara-kerja" className="text-gray-500 hover:text-gray-900 text-sm lg:text-base">Cara Kerja</a>
-            <a href="#paket" className="text-gray-500 hover:text-gray-900 text-sm lg:text-base">Paket Langganan</a>
-            <a href="#faq" className="text-gray-500 hover:text-gray-900 text-sm lg:text-base">FAQ</a>
+            {navItems.map((item) => {
+              // Cek apakah di halaman Home DAN section-nya aktif
+              const isActive = isHomePage && activeSection === item.id;
+              
+              return (
+                <Link 
+                  key={item.id}
+                  to={`/#${item.id}`} 
+                  onClick={(e) => handleNavClick(e, item.id)}
+                  className={`text-sm lg:text-base font-medium transition-colors ${
+                    isActive 
+                      ? 'text-gray-900 font-bold' 
+                      : 'text-gray-500 hover:text-gray-900'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* Actions (Tablet & Desktop) */}
-          {/* md:gap-3 untuk tablet, lg:gap-6 untuk desktop */}
           <div className="hidden md:flex items-center md:gap-3 lg:gap-6 shrink-0">
             <Link to="/login" className="text-gray-900 font-medium hover:text-blue-600 text-sm lg:text-base">
               Login
             </Link>
-            {/* Bungkus button dengan div agar bisa mengatur scale/ukuran di tablet jika Button component tidak menerima props className */}
             <div className="transform md:scale-90 lg:scale-100 origin-right">
-              <Button variant="primary">Daftarkan Laundry</Button>
+              <Button variant="primary" onClick={() => navigate('/RegistrationOwnerPage')}>Daftarkan Laundry</Button>
             </div>
           </div>
 
-          {/* Mobile Menu Button (Hamburger Icon) - Tetap muncul HANYA di bawah ukuran md (tablet) */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -66,22 +146,35 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown Panel */}
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 absolute w-full left-0 shadow-lg pb-6">
           <nav className="flex flex-col px-4 pt-4 pb-2 space-y-3">
-            <a href="#beranda" onClick={closeMenu} className="text-gray-900 font-medium block px-2 py-1 rounded-md hover:bg-gray-50">Beranda</a>
-            <a href="#fitur" onClick={closeMenu} className="text-gray-500 hover:text-gray-900 block px-2 py-1 rounded-md hover:bg-gray-50">Fitur</a>
-            <a href="#cara-kerja" onClick={closeMenu} className="text-gray-500 hover:text-gray-900 block px-2 py-1 rounded-md hover:bg-gray-50">Cara Kerja</a>
-            <a href="#paket" onClick={closeMenu} className="text-gray-500 hover:text-gray-900 block px-2 py-1 rounded-md hover:bg-gray-50">Paket Langganan</a>
-            <a href="#faq" onClick={closeMenu} className="text-gray-500 hover:text-gray-900 block px-2 py-1 rounded-md hover:bg-gray-50">FAQ</a>
+            {navItems.map((item) => {
+              // Cek active state untuk versi mobile juga
+              const isActive = isHomePage && activeSection === item.id;
+              
+              return (
+                <Link 
+                  key={item.id}
+                  to={`/#${item.id}`} 
+                  onClick={(e) => handleNavClick(e, item.id)}
+                  className={`block px-2 py-1 rounded-md font-medium ${
+                    isActive 
+                      ? 'text-gray-900 bg-gray-100 font-bold' 
+                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
           </nav>
           
           <div className="flex flex-col px-6 mt-4 space-y-4">
             <Link to="/login" onClick={closeMenu} className="text-center text-gray-900 font-medium border border-gray-200 rounded-lg py-2 hover:bg-gray-50">
               Login
             </Link>
-            <Button variant="primary" className="w-full" onClick={closeMenu}>
+            <Button variant="primary" className="w-full" onClick={() => { navigate('/RegistrationOwnerPage'); closeMenu(); }}>
               Daftarkan Laundry
             </Button>
           </div>

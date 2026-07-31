@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "../components/layout/rootLayout";
-import Home from "../pages/LandingPage/LandingPage";
+import LandingPage from "../pages/LandingPage/LandingPage";
+import { RegistrationOwnerPage } from "../pages/DaftarOwnerLaundry/DaftarOwnerLaundry";
 // Import file ErrorPage jika kamu sudah membuatnya
 // import ErrorPage from "../components/ErrorPage/ErrorPage"; 
 
@@ -12,9 +13,12 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />
+        element: <LandingPage />
       },
-      // Halaman lain seperti login atau dashboard nanti bisa ditambahkan di sini
+      {
+        path: '/RegistrationOwnerPage',
+        element: <RegistrationOwnerPage/>
+      }
       // {
       //   path: "/login",
       //   element: <Login />
