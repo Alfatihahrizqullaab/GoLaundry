@@ -5,6 +5,7 @@ import { HowItWorksSection } from '../../features/landing/HowItWorksSection/HowI
 import { PricingSection } from '../../features/landing/PricingSection/PricingSection';
 import { TestimonialsSection } from '../../features/landing/TestimonialSection/TestimonialSection';
 import { FAQSection } from '../../features/landing/FAQSection/FAQSection';
+import { CTASection } from '../../features/landing/CTASection/CTASection';
 
 const LandingPage: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const LandingPage: React.FC = () => {
       <PricingSection></PricingSection>
       <TestimonialsSection></TestimonialsSection>
       <FAQSection></FAQSection>
+      <CTASection></CTASection>
     </main>
   );
 };
