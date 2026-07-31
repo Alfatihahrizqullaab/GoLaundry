@@ -118,8 +118,15 @@ const Header = () => {
           </nav>
 
           <div className="hidden md:flex items-center md:gap-3 lg:gap-6 shrink-0">
-            <Link to="/login" className="text-gray-900 font-medium hover:text-blue-600 text-sm lg:text-base">
-              Login
+            <Link 
+              to="/LoginOwnerPage" 
+              className={`text-sm lg:text-base transition-colors ${
+                location.pathname === '/LoginOwnerPage'
+                  ? 'text-blue-600 font-bold' // Warna saat sedang di halaman Login (misal: Biru tebal)
+                  : 'text-gray-700 font-medium hover:text-blue-600' // Warna normal (abu-abu gelap)
+              }`}
+              >
+                Login
             </Link>
             <div className="transform md:scale-90 lg:scale-100 origin-right">
               <Button variant="primary" onClick={() => navigate('/RegistrationOwnerPage')}>Daftarkan Laundry</Button>
@@ -171,8 +178,16 @@ const Header = () => {
           </nav>
           
           <div className="flex flex-col px-6 mt-4 space-y-4">
-            <Link to="/login" onClick={closeMenu} className="text-center text-gray-900 font-medium border border-gray-200 rounded-lg py-2 hover:bg-gray-50">
-              Login
+            <Link 
+              to="/LoginOwnerPage" 
+              onClick={closeMenu} 
+              className={`text-center border border-gray-200 rounded-lg py-2 transition-colors ${
+                location.pathname === '/LoginOwnerPage'
+                  ? 'text-blue-600 font-bold bg-blue-50 border-blue-200' // Terang & Biru jika sedang aktif
+                  : 'text-gray-700 font-medium hover:bg-gray-50'
+              }`}
+              >
+                Login
             </Link>
             <Button variant="primary" className="w-full" onClick={() => { navigate('/RegistrationOwnerPage'); closeMenu(); }}>
               Daftarkan Laundry

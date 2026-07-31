@@ -41,14 +41,7 @@ export function RegistrationOwnerPage() {
 
       {/* Sisi Kanan (Form Wrapper) */}
       <div className="w-full lg:w-7/12 p-6 md:p-12 lg:p-16 flex items-center justify-center relative">
-        <Link to="/" className="lg:hidden absolute top-6 left-6 flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm">
-            <Droplets size={18} />
-          </div>
-          <span className="font-bold text-lg text-gray-900">
-            Go<span className="text-blue-600">Laundry</span>
-          </span>
-        </Link>
+        
 
         <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-gray-200 p-8 overflow-hidden">
           <div className="mb-8">
