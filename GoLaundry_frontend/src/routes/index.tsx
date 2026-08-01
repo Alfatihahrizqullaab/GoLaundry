@@ -1,8 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
-import RootLayout from "../components/layout/rootLayout";
+import RootLayout from "../components/layout/landingComponent/rootLayout";
 import LandingPage from "../pages/LandingPage/LandingPage";
 import { RegistrationOwnerPage } from "../pages/DaftarOwnerLaundryPage/DaftarOwnerLaundry";
 import { LoginOwnerPage } from "../pages/LoginOwner/LoginOwnerPage";
+
+
+import DashboardPage from "../pages/DashboardPageOwner/DashboardPageOwner";
 // Import file ErrorPage jika kamu sudah membuatnya
 // import ErrorPage from "../components/ErrorPage/ErrorPage"; 
 
@@ -29,5 +32,9 @@ export const router = createBrowserRouter([
       //   element: <Login />
       // }
     ]
+  },
+  {
+    path: "/dashboardOwner",
+    element: <DashboardPage/>
   }
 ]);

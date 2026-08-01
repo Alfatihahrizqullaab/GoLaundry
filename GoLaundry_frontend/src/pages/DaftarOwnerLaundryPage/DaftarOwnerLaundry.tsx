@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Droplets } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
-import { AuthSidebar } from '../../features/authOwnerLaundry/AuthSidebar/AuthSidebar';
-import { StoreInfoStep } from '../../features/authOwnerLaundry/StoreInfoStep/StoreInfoStep';
-import { AccountInfoStep } from '../../features/authOwnerLaundry/AccountInfoStep/AccountInfoStep';
+import { AuthSidebar } from '../../features/authOwnerLaundry/daftar/AuthSidebar';
+import { StoreInfoStep } from '../../features/authOwnerLaundry/daftar/StoreInfoStep';
+import { AccountInfoStep } from '../../features/authOwnerLaundry/daftar/AccountInfoStep';
 
 export function RegistrationOwnerPage() {
   const navigate = useNavigate();
