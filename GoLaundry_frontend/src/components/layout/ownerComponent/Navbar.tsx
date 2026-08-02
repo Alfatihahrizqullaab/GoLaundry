@@ -3,9 +3,10 @@ import { Search, Bell, Menu } from 'lucide-react';
 
 interface NavbarProps {
   onMenuClick: () => void;
+  title?: string;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onMenuClick, title = "Dashboard Oprasional" }) => {
   return (
     <header className="h-20 bg-white border-b border-gray-100 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
       <div className="flex items-center gap-3">
