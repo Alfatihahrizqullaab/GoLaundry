@@ -24,7 +24,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const menuUtama = [
     { name: 'Dashboard', path: '/dashboardOwner', icon: LayoutDashboard },
     { name: 'Profil Toko', path: '/profileToko', icon: Store },
-    { name: 'Karyawan', path: '/employees', icon: Users },
+    { name: 'Karyawan', path: '/Karyawan', icon: Users },
     { name: 'Layanan', path: '/services', icon: Shirt },
   ];
 

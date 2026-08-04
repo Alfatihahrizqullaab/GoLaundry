@@ -1,144 +1,143 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, User } from 'lucide-react';
+import { Plus, Edit, Trash2 } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/ownerComponent/DashboardLayout';
-
-// Tipe data untuk Karyawan
-interface Employee {
-  id: string;
-  name: string;
-  photoUrl: string | null; // URL foto, null jika belum ada foto
-  position: string;
-  phone: string;
-  status: 'Aktif' | 'Cuti';
-}
+import { type EmployeeFormData, EmployeeFormModal } from '../../components/dashboardOwner/EmployeeFormModal';
 
 export const KaryawanPage: React.FC = () => {
-  // Data dummy karyawan (sudah ditambahkan properti foto)
-  const [employees] = useState<Employee[]>([
+  // State Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<'tambah' | 'edit'>('tambah');
+  const [selectedEmployee, setSelectedEmployee] = useState<EmployeeFormData | null>(null);
+
+  // State Data Dummy
+  const [employees, setEmployees] = useState<EmployeeFormData[]>([
     {
-      id: '1',
-      name: 'Agus Subandono',
-      photoUrl: 'https://ui-avatars.com/api/?name=Agus+Subandono&background=eff6ff&color=2563eb',
-      position: 'Kasir',
-      phone: '0812-xxxx-xxxx',
+      idKaryawan: 'KRY-001',
+      nama: 'Agus Subandono',
+      usia: '28',
+      posisi: 'Kasir',
+      alamat: 'Jl. Melati No. 10',
+      fotoKaryawan: null,
+      photoURL: 'https://ui-avatars.com/api/?name=Agus+Subandono&background=eff6ff&color=2563eb',
       status: 'Aktif'
     },
     {
-      id: '2',
-      name: 'Siti Rahmawati',
-      photoUrl: 'https://ui-avatars.com/api/?name=Siti+Rahmawati&background=eff6ff&color=2563eb',
-      position: 'Karyawan Produksi',
-      phone: '0813-xxxx-xxxx',
+      idKaryawan: 'KRY-002', 
+      nama: 'Siti Rahmawati',
+      usia: '25',
+      posisi: 'Karyawan',
+      alamat: 'Jl. Kenangan No. 9',
+      fotoKaryawan: null,
+      photoURL: 'https://ui-avatars.com/api/?name=Siti+Rahmawati&background=eff6ff&color=2563eb',
       status: 'Aktif'
-    },
-    {
-      id: '3',
-      name: 'Joko Anwar',
-      photoUrl: 'https://ui-avatars.com/api/?name=Joko+Anwar&background=fff7ed&color=ea580c',
-      position: 'Kurir',
-      phone: '0857-xxxx-xxxx',
-      status: 'Cuti'
     }
   ]);
 
+  // Handler Buka Modal Tambah
+  const handleOpenAdd = () => {
+    setModalMode('tambah');
+    setSelectedEmployee(null);
+    setIsModalOpen(true);
+  };
+
+  // Handler Buka Modal Edit
+  const handleOpenEdit = (employee: EmployeeFormData) => {
+    setModalMode('edit');
+    setSelectedEmployee(employee);
+    setIsModalOpen(true);
+  };
+
+  // Handler Hapus Karyawan
+  const handleDelete = (idKaryawan: string | undefined, nama: string) => {
+    if (!idKaryawan) return;
+    const isConfirm = window.confirm(`Apakah Anda yakin ingin menghapus ${nama}?`);
+    if (isConfirm) {
+      setEmployees(employees.filter(emp => emp.idKaryawan !== idKaryawan));
+    }
+  };
+
+  // Handler Simpan Data
+  const handleSubmitData = (data: EmployeeFormData) => {
+    if (modalMode === 'tambah') {
+      const newId = `KRY-${Math.floor(Math.random() * 10000)}`;
+      
+      const newData: EmployeeFormData = { 
+        ...data, 
+        idKaryawan: newId,
+        status: 'Aktif', 
+        photoURL: `https://ui-avatars.com/api/?name=${data.nama.replace(/ /g, '+')}&background=eff6ff&color=2563eb` 
+      };
+      setEmployees([...employees, newData]);
+    } else {
+      const updatedData = employees.map(emp => 
+        emp.idKaryawan === data.idKaryawan ? { ...emp, ...data } : emp
+      );
+      setEmployees(updatedData);
+    }
+    setIsModalOpen(false);
+  };
+
   return (
-    // Mengatur title Navbar menjadi "Karyawan"
     <DashboardLayout title="Karyawan">
       <div className="w-full">
-        {/* Card Container */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100/50 overflow-hidden">
           
-          {/* Header Card: Judul & Tombol Tambah */}
-          <div className="p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-100">
+          {/* Header Card */}
+          <div className="p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-100">
             <h2 className="text-xl font-bold text-slate-800">Daftar Karyawan</h2>
-            <button className="flex items-center gap-2 px-5 py-2.5 bg-[#1a56ff] text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20 w-full sm:w-auto justify-center">
-              <Plus className="w-5 h-5" />
-              Tambah Karyawan
+            <button 
+              onClick={handleOpenAdd}
+              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors w-full sm:w-auto justify-center"
+            >
+              <Plus className="w-5 h-5" /> Tambah Karyawan
             </button>
           </div>
 
-          {/* Table Container (Bisa di-scroll horizontal di Mobile) */}
-          <div className="overflow-x-auto w-full">
+          {/* =========================================
+              TAMPILAN DESKTOP & TABLET (TABEL HORIZONTAL)
+              Disembunyikan di layar HP (hidden md:block)
+              ========================================= */}
+          <div className="hidden md:block overflow-x-auto w-full">
             <table className="w-full text-left border-collapse min-w-[800px]">
-              {/* Header Tabel */}
               <thead>
                 <tr className="bg-slate-50/50">
-                  <th className="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-gray-100">
-                    Nama Pegawai
-                  </th>
-                  <th className="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-gray-100">
-                    Posisi / Jabatan
-                  </th>
-                  <th className="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-gray-100">
-                    No. Telepon
-                  </th>
-                  <th className="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-gray-100">
-                    Status
-                  </th>
-                  <th className="py-4 px-6 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-gray-100 text-center">
-                    Aksi
-                  </th>
+                  <th className="py-4 px-6 text-xs font-bold text-slate-500 uppercase border-b border-gray-100">Nama Pegawai</th>
+                  <th className="py-4 px-6 text-xs font-bold text-slate-500 uppercase border-b border-gray-100">Posisi / Jabatan</th>
+                  <th className="py-4 px-6 text-xs font-bold text-slate-500 uppercase border-b border-gray-100">ID Karyawan</th>
+                  <th className="py-4 px-6 text-xs font-bold text-slate-500 uppercase border-b border-gray-100">Status</th>
+                  <th className="py-4 px-6 text-xs font-bold text-slate-500 uppercase border-b border-gray-100 text-center">Aksi</th>
                 </tr>
               </thead>
-              
-              {/* Body Tabel */}
               <tbody>
                 {employees.map((employee) => (
-                  <tr key={employee.id} className="hover:bg-slate-50/80 transition-colors group">
-                    {/* Kolom Nama & Foto (Digabung agar rapi) */}
+                  <tr key={employee.idKaryawan} className="hover:bg-slate-50/80 transition-colors">
                     <td className="py-4 px-6 border-b border-gray-50">
                       <div className="flex items-center gap-3">
-                        {/* Foto Profil */}
-                        {employee.photoUrl ? (
-                          <img 
-                            src={employee.photoUrl} 
-                            alt={`Foto ${employee.name}`} 
-                            className="w-10 h-10 rounded-full object-cover border border-gray-200"
-                          />
-                        ) : (
-                          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 border border-gray-200">
-                            <User className="w-5 h-5" />
-                          </div>
-                        )}
-                        <span className="font-semibold text-slate-800">{employee.name}</span>
+                        <img src={employee.photoURL} alt="Foto" className="w-10 h-10 rounded-full object-cover border border-gray-200" />
+                        <div>
+                          <span className="font-semibold text-slate-800 block">{employee.nama}</span>
+                          <span className="text-xs text-slate-500">Usia: {employee.usia} Thn</span>
+                        </div>
                       </div>
                     </td>
-                    
-                    {/* Kolom Jabatan */}
                     <td className="py-4 px-6 border-b border-gray-50 text-sm text-slate-600 font-medium">
-                      {employee.position}
+                      {employee.posisi}
                     </td>
-                    
-                    {/* Kolom Telepon */}
-                    <td className="py-4 px-6 border-b border-gray-50 text-sm text-slate-600">
-                      {employee.phone}
+                    <td className="py-4 px-6 border-b border-gray-50 text-sm text-slate-600 font-medium">
+                      {employee.idKaryawan}
                     </td>
-                    
-                    {/* Kolom Status (Badge) */}
                     <td className="py-4 px-6 border-b border-gray-50">
-                      <span className={`px-3 py-1.5 rounded-full text-xs font-bold ${
-                        employee.status === 'Aktif' 
-                          ? 'bg-emerald-100 text-emerald-700' 
-                          : 'bg-orange-100 text-orange-700'
-                      }`}>
+                      <span className={`px-3 py-1.5 rounded-full text-xs font-bold ${employee.status === 'Aktif' ? 'bg-emerald-100 text-emerald-700' : 'bg-orange-100 text-orange-700'}`}>
                         {employee.status}
                       </span>
                     </td>
-                    
-                    {/* Kolom Aksi (Edit & Hapus) */}
                     <td className="py-4 px-6 border-b border-gray-50">
                       <div className="flex items-center justify-center gap-2">
-                        <button 
-                          className="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                          title="Edit"
-                        >
-                          <Edit className="w-4 h-4" />
+                        <button onClick={() => handleOpenEdit(employee)} className="flex items-center gap-1.5 px-3 py-1.5 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors text-sm font-medium">
+                          <Edit className="w-4 h-4" /> <span className="hidden sm:inline">Edit</span>
                         </button>
-                        <button 
-                          className="p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                          title="Hapus"
-                        >
-                          <Trash2 className="w-4 h-4" />
+                        <button onClick={() => handleDelete(employee.idKaryawan, employee.nama)} className="flex items-center gap-1.5 px-3 py-1.5 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors text-sm font-medium">
+                          <Trash2 className="w-4 h-4" /> <span className="hidden sm:inline">Hapus</span>
                         </button>
                       </div>
                     </td>
@@ -147,9 +146,72 @@ export const KaryawanPage: React.FC = () => {
               </tbody>
             </table>
           </div>
+
+          {/* =========================================
+              TAMPILAN MOBILE (LIST CARD KE BAWAH)
+              Hanya muncul di layar HP (block md:hidden)
+              ========================================= */}
+          <div className="block md:hidden p-4 space-y-4">
+            {employees.map((employee) => (
+              <div key={employee.idKaryawan} className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col gap-4">
+                
+                {/* Info Utama: Foto, Nama, Usia, Status */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <img src={employee.photoURL} alt="Foto" className="w-12 h-12 rounded-full object-cover border border-gray-200 shadow-sm" />
+                    <div>
+                      <span className="font-bold text-slate-800 block text-base">{employee.nama}</span>
+                      <span className="text-xs text-slate-500 font-medium">Usia: {employee.usia} Thn</span>
+                    </div>
+                  </div>
+                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${employee.status === 'Aktif' ? 'bg-emerald-100 text-emerald-700' : 'bg-orange-100 text-orange-700'}`}>
+                    {employee.status}
+                  </span>
+                </div>
+
+                {/* Info Tambahan: Jabatan & ID */}
+                <div className="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-lg border border-slate-100/50">
+                  <div>
+                    <span className="block text-[11px] text-slate-400 font-bold uppercase tracking-wide mb-0.5">Posisi / Jabatan</span>
+                    <span className="text-sm text-slate-700 font-semibold">{employee.posisi}</span>
+                  </div>
+                  <div>
+                    <span className="block text-[11px] text-slate-400 font-bold uppercase tracking-wide mb-0.5">ID Karyawan</span>
+                    <span className="text-sm text-slate-700 font-semibold">{employee.idKaryawan}</span>
+                  </div>
+                </div>
+
+                {/* Tombol Aksi */}
+                <div className="flex items-center gap-2 pt-2">
+                  <button 
+                    onClick={() => handleOpenEdit(employee)} 
+                    className="flex-1 flex justify-center items-center gap-2 py-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors text-sm font-semibold"
+                  >
+                    <Edit className="w-4 h-4" /> Edit
+                  </button>
+                  <button 
+                    onClick={() => handleDelete(employee.idKaryawan, employee.nama)} 
+                    className="flex-1 flex justify-center items-center gap-2 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors text-sm font-semibold"
+                  >
+                    <Trash2 className="w-4 h-4" /> Hapus
+                  </button>
+                </div>
+
+              </div>
+            ))}
+          </div>
           
         </div>
       </div>
+
+      {/* Komponen Modal */}
+      <EmployeeFormModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleSubmitData}
+        mode={modalMode}
+        initialData={selectedEmployee}
+      />
     </DashboardLayout>
   );
 };
