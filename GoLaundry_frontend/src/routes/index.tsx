@@ -20,6 +20,7 @@ import { TagihanPage } from "../pages/Owner/TagihanPage/TagihanPage";
 
 
 import DashboardKasirPage from "../pages/Kasir/DashboardKasirPage/DashboardKasirPage";
+import TransaksiKasirPage from "../pages/Kasir/TransaksiKasirPage/TransaksiKasirPage";
 // Import file ErrorPage jika kamu sudah membuatnya
 // import ErrorPage from "../components/ErrorPage/ErrorPage"; 
 
@@ -90,6 +91,10 @@ export const router = createBrowserRouter([
       {
         path: "/kasir/dashboard",
         element: <DashboardKasirPage />
+      },
+      {
+        path: "/kasir/transaksi",
+        element: <TransaksiKasirPage />
       }
     ]
   }
