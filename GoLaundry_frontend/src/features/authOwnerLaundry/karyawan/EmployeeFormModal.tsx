@@ -111,10 +111,10 @@ export const EmployeeFormModal: React.FC<EmployeeFormModalProps> = ({
               {/* pr-10 ditambahkan agar panah tidak mepet border */}
               <select 
                 name="posisi" 
-                required 
+                required  
                 value={formData.posisi} 
                 onChange={handleChange} 
-                className="w-full pl-4 pr-12 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-sm cursor-pointer"
+                className="w-full pl-3 pr-10 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-sm cursor-pointer"
               >
                 <option value="" disabled>Pilih posisi karyawan...</option>
                 <option value="Kasir">Kasir</option>

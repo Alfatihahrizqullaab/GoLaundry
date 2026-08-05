@@ -7,7 +7,8 @@ export const ProfileTokoPage: React.FC = () => {
         namaToko: 'Budi Laundry',
         nomorTelepon: '081234567890',
         alamat: 'Jl. Sudirman No. 12, Jakarta Selatan',
-        jamOperasional: '08:00 - 20:00'
+        jamBuka: '08:00',
+        jamTutup: '20:00'
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -80,14 +81,26 @@ export const ProfileTokoPage: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <label className="text-sm font-semibold text-slate-700">Jam Operasional</label>
-                                    <input 
-                                        type="text" 
-                                        name="jamOperasional"
-                                        value={formData.jamOperasional}
-                                        onChange={handleChange}
-                                        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm text-slate-800"
-                                    />
-                            </div>
+                                    <div className="flex items-center gap-3">
+                                        {/* Input Jam Buka */}
+                                        <input 
+                                            type="time" 
+                                            name="jamBuka"
+                                            value={formData.jamBuka}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm text-slate-800"
+                                        />
+                                        <span className="text-sm font-semibold text-slate-400">s/d</span>
+                                        {/* Input Jam Tutup */}
+                                        <input 
+                                            type="time" 
+                                            name="jamTutup"
+                                            value={formData.jamTutup}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm text-slate-800"
+                                        />
+                                    </div>
+                                </div>
                             <div className="pt-6 flex justify-end">
                                 <button 
                                     type="submit"

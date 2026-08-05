@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit, Trash2, AlertTriangle } from 'lucide-react';
 import { DashboardLayout } from '../../components/layout/ownerComponent/DashboardLayout';
-import { type EmployeeFormData, EmployeeFormModal } from '../../components/dashboardOwner/EmployeeFormModal';
+import { type EmployeeFormData, EmployeeFormModal } from '../../features/authOwnerLaundry/karyawan/EmployeeFormModal';
 
 export const KaryawanPage: React.FC = () => {
-  // State Modal
+  // State Modal Tambah/Edit
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'tambah' | 'edit'>('tambah');
   const [selectedEmployee, setSelectedEmployee] = useState<EmployeeFormData | null>(null);
+
+  // BARU: State untuk Modal Konfirmasi Hapus
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: '', nama: '' });
 
   // State Data Dummy
   const [employees, setEmployees] = useState<EmployeeFormData[]>([
@@ -33,34 +36,35 @@ export const KaryawanPage: React.FC = () => {
     }
   ]);
 
-  // Handler Buka Modal Tambah
+  // Handler Buka Modal Tambah & Edit
   const handleOpenAdd = () => {
     setModalMode('tambah');
     setSelectedEmployee(null);
     setIsModalOpen(true);
   };
 
-  // Handler Buka Modal Edit
   const handleOpenEdit = (employee: EmployeeFormData) => {
     setModalMode('edit');
     setSelectedEmployee(employee);
     setIsModalOpen(true);
   };
 
-  // Handler Hapus Karyawan
-  const handleDelete = (idKaryawan: string | undefined, nama: string) => {
+  // BARU: Handler untuk membuka Modal Hapus
+  const handleDeleteClick = (idKaryawan: string | undefined, nama: string) => {
     if (!idKaryawan) return;
-    const isConfirm = window.confirm(`Apakah Anda yakin ingin menghapus ${nama}?`);
-    if (isConfirm) {
-      setEmployees(employees.filter(emp => emp.idKaryawan !== idKaryawan));
-    }
+    setDeleteModal({ isOpen: true, id: idKaryawan, nama: nama });
   };
 
-  // Handler Simpan Data
+  // BARU: Handler Eksekusi Hapus (Dipanggil dari tombol "Ya, Hapus" di modal)
+  const confirmDelete = () => {
+    setEmployees(employees.filter(emp => emp.idKaryawan !== deleteModal.id));
+    setDeleteModal({ isOpen: false, id: '', nama: '' }); // Tutup modal setelah dihapus
+  };
+
+  // Handler Simpan Data (Dari Modal Tambah/Edit)
   const handleSubmitData = (data: EmployeeFormData) => {
     if (modalMode === 'tambah') {
       const newId = `KRY-${Math.floor(Math.random() * 10000)}`;
-      
       const newData: EmployeeFormData = { 
         ...data, 
         idKaryawan: newId,
@@ -93,10 +97,7 @@ export const KaryawanPage: React.FC = () => {
             </button>
           </div>
 
-          {/* =========================================
-              TAMPILAN DESKTOP & TABLET (TABEL HORIZONTAL)
-              Disembunyikan di layar HP (hidden md:block)
-              ========================================= */}
+          {/* TAMPILAN DESKTOP & TABLET */}
           <div className="hidden md:block overflow-x-auto w-full">
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
@@ -136,7 +137,8 @@ export const KaryawanPage: React.FC = () => {
                         <button onClick={() => handleOpenEdit(employee)} className="flex items-center gap-1.5 px-3 py-1.5 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors text-sm font-medium">
                           <Edit className="w-4 h-4" /> <span className="hidden sm:inline">Edit</span>
                         </button>
-                        <button onClick={() => handleDelete(employee.idKaryawan, employee.nama)} className="flex items-center gap-1.5 px-3 py-1.5 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors text-sm font-medium">
+                        {/* Panggil handleDeleteClick, bukan logic Hapus langsung */}
+                        <button onClick={() => handleDeleteClick(employee.idKaryawan, employee.nama)} className="flex items-center gap-1.5 px-3 py-1.5 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors text-sm font-medium">
                           <Trash2 className="w-4 h-4" /> <span className="hidden sm:inline">Hapus</span>
                         </button>
                       </div>
@@ -147,15 +149,10 @@ export const KaryawanPage: React.FC = () => {
             </table>
           </div>
 
-          {/* =========================================
-              TAMPILAN MOBILE (LIST CARD KE BAWAH)
-              Hanya muncul di layar HP (block md:hidden)
-              ========================================= */}
+          {/* TAMPILAN MOBILE */}
           <div className="block md:hidden p-4 space-y-4">
             {employees.map((employee) => (
               <div key={employee.idKaryawan} className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex flex-col gap-4">
-                
-                {/* Info Utama: Foto, Nama, Usia, Status */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <img src={employee.photoURL} alt="Foto" className="w-12 h-12 rounded-full object-cover border border-gray-200 shadow-sm" />
@@ -168,8 +165,6 @@ export const KaryawanPage: React.FC = () => {
                     {employee.status}
                   </span>
                 </div>
-
-                {/* Info Tambahan: Jabatan & ID */}
                 <div className="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-lg border border-slate-100/50">
                   <div>
                     <span className="block text-[11px] text-slate-400 font-bold uppercase tracking-wide mb-0.5">Posisi / Jabatan</span>
@@ -180,23 +175,15 @@ export const KaryawanPage: React.FC = () => {
                     <span className="text-sm text-slate-700 font-semibold">{employee.idKaryawan}</span>
                   </div>
                 </div>
-
-                {/* Tombol Aksi */}
                 <div className="flex items-center gap-2 pt-2">
-                  <button 
-                    onClick={() => handleOpenEdit(employee)} 
-                    className="flex-1 flex justify-center items-center gap-2 py-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors text-sm font-semibold"
-                  >
+                  <button onClick={() => handleOpenEdit(employee)} className="flex-1 flex justify-center items-center gap-2 py-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors text-sm font-semibold">
                     <Edit className="w-4 h-4" /> Edit
                   </button>
-                  <button 
-                    onClick={() => handleDelete(employee.idKaryawan, employee.nama)} 
-                    className="flex-1 flex justify-center items-center gap-2 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors text-sm font-semibold"
-                  >
+                  {/* Panggil handleDeleteClick, bukan logic Hapus langsung */}
+                  <button onClick={() => handleDeleteClick(employee.idKaryawan, employee.nama)} className="flex-1 flex justify-center items-center gap-2 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors text-sm font-semibold">
                     <Trash2 className="w-4 h-4" /> Hapus
                   </button>
                 </div>
-
               </div>
             ))}
           </div>
@@ -204,7 +191,7 @@ export const KaryawanPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Komponen Modal */}
+      {/* MODAL TAMBAH & EDIT */}
       <EmployeeFormModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
@@ -212,6 +199,44 @@ export const KaryawanPage: React.FC = () => {
         mode={modalMode}
         initialData={selectedEmployee}
       />
+
+      {/* BARU: MODAL KONFIRMASI HAPUS */}
+      {deleteModal.isOpen && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" 
+            onClick={() => setDeleteModal({ isOpen: false, id: '', nama: '' })}
+          />
+          <div className="relative bg-white rounded-2xl w-full max-w-sm p-6 sm:p-8 shadow-2xl text-center flex flex-col items-center animate-in fade-in zoom-in duration-200">
+            
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-5">
+              <Trash2 className="w-8 h-8 text-red-600" />
+            </div>
+            
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Hapus Karyawan?</h3>
+            <p className="text-sm text-gray-500 mb-8 leading-relaxed">
+              Apakah Anda yakin ingin menghapus data karyawan <span className="font-bold text-gray-800">{deleteModal.nama}</span>? Data yang sudah dihapus tidak dapat dikembalikan.
+            </p>
+            
+            <div className="flex gap-3 w-full">
+              <button 
+                onClick={() => setDeleteModal({ isOpen: false, id: '', nama: '' })}
+                className="flex-1 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-colors text-sm"
+              >
+                Batal
+              </button>
+              <button 
+                onClick={confirmDelete}
+                className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-colors shadow-md shadow-red-500/20 text-sm"
+              >
+                Ya, Hapus
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </DashboardLayout>
   );
 };
