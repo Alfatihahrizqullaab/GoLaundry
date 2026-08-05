@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DashboardLayout } from '../../components/layout/ownerComponent/DashboardLayout';
+
 import { Search, Filter, CheckCircle2 } from 'lucide-react';
 
 export const RiwayatTransaksiPage: React.FC = () => {
@@ -30,7 +30,7 @@ export const RiwayatTransaksiPage: React.FC = () => {
   };
 
   return (
-    <DashboardLayout title="Riwayat Transaksi">
+    <>
       <div className="w-full">
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
@@ -92,7 +92,7 @@ export const RiwayatTransaksiPage: React.FC = () => {
         </div>
 
       </div>
-    </DashboardLayout>
+    </>
   );
 };
 

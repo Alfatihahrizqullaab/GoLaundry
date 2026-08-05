@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { DashboardLayout } from '../../components/layout/ownerComponent/DashboardLayout';
 import { Search, CreditCard } from 'lucide-react';
-import { PaymentModal, type PaymentFormData } from '../../features/authOwnerLaundry/langganan/PaymentModal';
+import { PaymentModal, type PaymentFormData } from '../../../features/authOwnerLaundry/langganan/PaymentModal';
 
 export const TagihanPage: React.FC = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
@@ -43,7 +42,7 @@ export const TagihanPage: React.FC = () => {
   };
 
   return (
-    <DashboardLayout title="Tagihan & Pembayaran">
+    <>
       <div className="w-full">
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
@@ -109,6 +108,6 @@ export const TagihanPage: React.FC = () => {
         onSubmit={handlePaymentSubmit}
         orderData={selectedOrder}
       />
-    </DashboardLayout>
+    </>
   );
 };

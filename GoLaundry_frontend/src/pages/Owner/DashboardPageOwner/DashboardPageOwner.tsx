@@ -1,14 +1,14 @@
 import React from 'react';
 import { TrendingUp, Activity, Clock, Users } from 'lucide-react';
-import { DashboardLayout } from '../../components/layout/ownerComponent/DashboardLayout';
-import { SubscriptionAlert } from '../../features/authOwnerLaundry/dashboard/SubscriptionAlert';
-import { StatCard } from '../../features/authOwnerLaundry/dashboard/StatCard';
-import { RevenueChart } from '../../features/authOwnerLaundry/dashboard/RevenueChart';
-import { PopularServices } from '../../features/authOwnerLaundry/dashboard/PopularServices';
+
+import { SubscriptionAlert } from '../../../features/authOwnerLaundry/dashboard/SubscriptionAlert';
+import { StatCard } from '../../../features/authOwnerLaundry/dashboard/StatCard';
+import { RevenueChart } from '../../../features/authOwnerLaundry/dashboard/RevenueChart';
+import { PopularServices } from '../../../features/authOwnerLaundry/dashboard/PopularServices';
 
 export const DashboardPage: React.FC = () => {
   return (
-    <DashboardLayout>
+    <>
       {/* 1. Subscription Alert Banner */}
       <SubscriptionAlert />
 
@@ -56,7 +56,7 @@ export const DashboardPage: React.FC = () => {
           <PopularServices />
         </div>
       </div>
-    </DashboardLayout>
+    </>
   );
 };
 

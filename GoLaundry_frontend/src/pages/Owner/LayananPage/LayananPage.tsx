@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Plus, Edit, Trash2, Clock } from 'lucide-react';
 // Import Komponen General dari folder components
-import { DashboardLayout } from '../../components/layout/ownerComponent/DashboardLayout'; 
+ 
 // Import Komponen Spesifik dari folder features
-import { ServiceFormModal, type ServiceFormData } from '../../features/authOwnerLaundry/layanan/ServiceFormModal';
+import { ServiceFormModal, type ServiceFormData } from '../../../features/authOwnerLaundry/layanan/ServiceFormModal';
 
 export const LayananPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,7 +47,7 @@ export const LayananPage: React.FC = () => {
   };
 
   return (
-    <DashboardLayout title="Layanan">
+    <>
       <div className="w-full">
         
         {/* Header Title & Tombol Tambah */}
@@ -126,7 +126,7 @@ export const LayananPage: React.FC = () => {
           </div>
         </div>
       )}
-    </DashboardLayout>
+    </>
   );
 };
 

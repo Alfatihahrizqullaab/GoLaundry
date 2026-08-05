@@ -1,19 +1,25 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import RootLayout from "../components/layout/landingComponent/rootLayout";
+import { DashboardLayout } from "../components/layout/ownerComponent/DashboardLayout";
+import { DashboardKasirLayout } from "../components/layout/kasirComponent/DashboardKasirLayout";
+
 import LandingPage from "../pages/LandingPage/LandingPage";
 
 import { RegistrationOwnerPage } from "../pages/DaftarOwnerLaundryPage/DaftarOwnerLaundry";
 import { LoginOwnerPage } from "../pages/LoginOwner/LoginOwnerPage";
 
-import { ProfileTokoPage } from "../pages/ProfileTokoPage/ProfileTokoPage";
-import DashboardPage from "../pages/DashboardPageOwner/DashboardPageOwner";
-import KaryawanPage from "../pages/KaryawanPage/KaryawanPage";
-import LayananPage from "../pages/LayananPage/LayananPage";
-import LanggananPage from "../pages/Langganan/LanggananPage";
-import RiwayatPembayaranPage from "../pages/RiwayatTransaksiPage/RiwayatTransaksiPage";
-import LaporanAnalisisPage from "../pages/LaporanAnalisisPage/LaporanAnalisisPage";
-import { TagihanPage } from "../pages/TagihanPage/TagihanPage";
+import { ProfileTokoPage } from "../pages/Owner/ProfileTokoPage/ProfileTokoPage";
+import DashboardPage from "../pages/Owner/DashboardPageOwner/DashboardPageOwner";
+import KaryawanPage from "../pages/Owner/KaryawanPage/KaryawanPage";
+import LayananPage from "../pages/Owner/LayananPage/LayananPage";
+import LanggananPage from "../pages/Owner/Langganan/LanggananPage";
+import RiwayatPembayaranPage from "../pages/Owner/RiwayatTransaksiPage/RiwayatTransaksiPage";
+import LaporanAnalisisPage from "../pages/Owner/LaporanAnalisisPage/LaporanAnalisisPage";
+import { TagihanPage } from "../pages/Owner/TagihanPage/TagihanPage";
+
+
+import DashboardKasirPage from "../pages/Kasir/DashboardKasirPage/DashboardKasirPage";
 // Import file ErrorPage jika kamu sudah membuatnya
 // import ErrorPage from "../components/ErrorPage/ErrorPage"; 
 
@@ -37,36 +43,55 @@ export const router = createBrowserRouter([
       }
     ]
   },
-  {
-    path: "/dashboardOwner",
-    element: <DashboardPage/>
+
+  // untuk owner
+  { 
+    
+    element: <DashboardLayout/>,
+    children: [
+      {
+        path: "/dashboardOwner",
+        element: <DashboardPage/>
+      },
+      {
+        path: "/profileToko",
+        element: <ProfileTokoPage /> 
+      },
+      {
+        path: "/Karyawan",
+        element: <KaryawanPage></KaryawanPage>
+      },
+      {
+        path: "/Layanan",
+        element: <LayananPage/>
+      },
+      {
+        path: "/Langganan",
+        element: <LanggananPage/>
+      },
+      {
+        path: "/riwayat-transaksi",
+        element: <RiwayatPembayaranPage/>
+      },
+      {
+        path: "/tagihan",
+        element: <TagihanPage/>
+      },
+      {
+        path: "/laporan-analisis",
+        element: <LaporanAnalisisPage/>
+      }
+    ]
+
   },
   {
-    path: "/profileToko",
-    element: <ProfileTokoPage /> 
-  },
-  {
-    path: "/Karyawan",
-    element: <KaryawanPage></KaryawanPage>
-  },
-  {
-    path: "/Layanan",
-    element: <LayananPage/>
-  },
-  {
-    path: "/Langganan",
-    element: <LanggananPage/>
-  },
-  {
-    path: "/riwayat-transaksi",
-    element: <RiwayatPembayaranPage/>
-  },
-  {
-    path: "/tagihan",
-    element: <TagihanPage/>
-  },
-  {
-    path: "/laporan-analisis",
-    element: <LaporanAnalisisPage/>
+    element: <DashboardKasirLayout />, 
+    children: [
+      {
+        path: "/kasir/dashboard",
+        element: <DashboardKasirPage />
+      }
+    ]
   }
+  
 ]);

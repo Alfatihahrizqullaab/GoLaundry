@@ -12,7 +12,7 @@ import {
   Users
 } from 'lucide-react';
 
-import { DashboardLayout } from '../../components/layout/ownerComponent/DashboardLayout';
+
 
 export const LaporanAnalisisPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'ringkasan' | 'analisis'>('ringkasan');
@@ -23,7 +23,7 @@ export const LaporanAnalisisPage: React.FC = () => {
   };
 
   return (
-    <DashboardLayout title="Laporan & Analisis">
+    <>
       <div className="w-full">
         
         {/* Header Section */}
@@ -198,7 +198,7 @@ export const LaporanAnalisisPage: React.FC = () => {
 
         </div>
       </div>
-    </DashboardLayout>
+    </>
   );
 };
 

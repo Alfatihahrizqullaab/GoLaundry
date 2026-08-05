@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Store } from 'lucide-react';
-import { DashboardLayout } from '../../components/layout/ownerComponent/DashboardLayout';
+
 
 export const ProfileTokoPage: React.FC = () => {
     const [ formData, setFromData ] = useState({
@@ -23,7 +23,7 @@ export const ProfileTokoPage: React.FC = () => {
     }
 
     return(
-        <DashboardLayout title='Profile Toko'>
+        <>
             <div className="max-w-8xl mx-auto w-full">
                 <div className='bg-white rounded-2xl p-6 sm:p-10 shadow-sm border border-gray-100/50'>
                     {/* Header Profil (Logo & Info) */}
@@ -114,6 +114,6 @@ export const ProfileTokoPage: React.FC = () => {
                     </form>
                 </div>
             </div>
-        </DashboardLayout>
+        </>
     )
 }

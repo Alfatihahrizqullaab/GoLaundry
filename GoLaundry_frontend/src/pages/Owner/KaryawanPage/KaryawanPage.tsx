@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Edit, Trash2, AlertTriangle } from 'lucide-react';
-import { DashboardLayout } from '../../components/layout/ownerComponent/DashboardLayout';
-import { type EmployeeFormData, EmployeeFormModal } from '../../features/authOwnerLaundry/karyawan/EmployeeFormModal';
+import { type EmployeeFormData, EmployeeFormModal } from '../../../features/authOwnerLaundry/karyawan/EmployeeFormModal';
 
 export const KaryawanPage: React.FC = () => {
   // State Modal Tambah/Edit
@@ -82,7 +81,7 @@ export const KaryawanPage: React.FC = () => {
   };
 
   return (
-    <DashboardLayout title="Karyawan">
+    <>
       <div className="w-full">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100/50 overflow-hidden">
           
@@ -237,7 +236,7 @@ export const KaryawanPage: React.FC = () => {
         </div>
       )}
 
-    </DashboardLayout>
+    </>
   );
 };
 

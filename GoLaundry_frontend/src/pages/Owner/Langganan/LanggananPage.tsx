@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { DashboardLayout } from '../../components/layout/ownerComponent/DashboardLayout';
+
 
 export const LanggananPage: React.FC = () => {
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ export const LanggananPage: React.FC = () => {
   };
 
   return (
-    <DashboardLayout title="Langganan">
+    <>
       <div className="w-full flex flex-col items-center pt-8 pb-12">
         
         <div className="text-center max-w-2xl mb-12">
@@ -99,7 +99,7 @@ export const LanggananPage: React.FC = () => {
           })}
         </div>
       </div>
-    </DashboardLayout>
+    </>
   );
 };
 
