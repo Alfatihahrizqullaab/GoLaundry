@@ -11,13 +11,17 @@ export const ModalPesananOffline: React.FC<ModalPesananOfflineProps> = ({ isOpen
   const [total_max, setTotal_max] = useState<number>(0); 
   const [nama_max, setNama_max] = useState<string>('');  
 
-  // --- STATE UNTUK LOGIKA PERHITUNGAN HARGA ---
-  // Default harga adalah Rp 8.000 (Cuci Komplit Reguler)
+  // --- STATE UNTUK LOGIKA PERHITUNGAN HARGA & PEMBAYARAN ---
   const [hargaLayanan, setHargaLayanan] = useState<number>(8000); 
   const [berat, setBerat] = useState<number>(0);
+  
+  // State khusus untuk sistem DP
+  const [statusBayar, setStatusBayar] = useState<string>('belum');
+  const [nominalDP, setNominalDP] = useState<number>(0);
 
   // Perhitungan otomatis secara real-time
   const estimasiTotal = hargaLayanan * berat;
+  const sisaTagihan = estimasiTotal - nominalDP;
 
   // Fungsi untuk memformat angka jadi Rupiah
   const formatRupiah = (angka: number) => {
@@ -32,6 +36,8 @@ export const ModalPesananOffline: React.FC<ModalPesananOfflineProps> = ({ isOpen
   const handleClose = () => {
     setHargaLayanan(8000);
     setBerat(0);
+    setStatusBayar('belum');
+    setNominalDP(0);
     onClose();
   };
 
@@ -92,7 +98,14 @@ export const ModalPesananOffline: React.FC<ModalPesananOfflineProps> = ({ isOpen
             </div>
             <div>
               <label className="block text-xs font-bold text-slate-500 mb-1.5">Status Pembayaran</label>
-              <select className="w-full px-4 py-2.5 bg-slate-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+              <select 
+                value={statusBayar}
+                onChange={(e) => {
+                  setStatusBayar(e.target.value);
+                  if (e.target.value !== 'dp') setNominalDP(0); // Reset DP jika pilih Lunas/Belum
+                }}
+                className="w-full px-4 py-2.5 bg-slate-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+              >
                 <option value="belum">Belum Lunas</option>
                 <option value="dp">Bayar DP</option>
                 <option value="lunas">Lunas</option>
@@ -100,12 +113,42 @@ export const ModalPesananOffline: React.FC<ModalPesananOfflineProps> = ({ isOpen
             </div>
           </div>
 
-          {/* Area Estimasi Total yang sudah terhubung dengan State */}
-          <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-xl flex justify-between items-center transition-all">
-            <span className="text-sm font-bold text-blue-800">Estimasi Total Harga:</span>
-            <span className="text-xl font-extrabold text-blue-700">
-              {formatRupiah(estimasiTotal)}
-            </span>
+          {/* KONDISIONAL: Render Input DP hanya jika statusBayar === 'dp' */}
+          {statusBayar === 'dp' && (
+            <div className="animate-in fade-in slide-in-from-top-2 duration-200">
+              <label className="block text-xs font-bold text-slate-500 mb-1.5">Nominal DP (Rp)</label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm font-medium">Rp</span>
+                <input 
+                  type="number" 
+                  min="0"
+                  value={nominalDP === 0 ? '' : nominalDP} 
+                  onChange={(e) => setNominalDP(Number(e.target.value))}
+                  placeholder="Masukkan jumlah DP..." 
+                  className="w-full pl-10 pr-4 py-2.5 bg-orange-50 border border-orange-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50" 
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Area Estimasi Total yang lebih interaktif */}
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-xl flex flex-col gap-2 transition-all">
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-bold text-blue-800">Estimasi Total Harga:</span>
+              <span className="text-xl font-extrabold text-blue-700">
+                {formatRupiah(estimasiTotal)}
+              </span>
+            </div>
+            
+            {/* Tampilkan sisa tagihan jika memilih Bayar DP */}
+            {statusBayar === 'dp' && (
+              <div className="flex justify-between items-center pt-3 mt-1 border-t border-blue-200/60 animate-in fade-in">
+                <span className="text-sm font-bold text-orange-700">Sisa Tagihan (Belum Lunas):</span>
+                <span className="text-lg font-extrabold text-orange-600">
+                  {formatRupiah(sisaTagihan > 0 ? sisaTagihan : 0)}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 

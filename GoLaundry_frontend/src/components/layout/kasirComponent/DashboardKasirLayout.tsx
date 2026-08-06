@@ -5,7 +5,6 @@ import { SidebarKasir } from './SidebarKasir';
 export const DashboardKasirLayout: React.FC = () => {
   const { pathname } = useLocation();
 
-  // Scroll otomatis ke atas saat ganti halaman
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [pathname]);
@@ -13,8 +12,8 @@ export const DashboardKasirLayout: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#f8fafc] flex">
       <SidebarKasir />
-      <main className="flex-1 ml-64 p-8 overflow-y-auto h-screen">
-        {/* Konten Halaman Kasir masuk ke sini */}
+      
+      <main className="flex-1 w-full md:ml-64 p-4 md:p-8 pb-24 md:pb-8 overflow-y-auto min-h-screen">
         <Outlet /> 
       </main>
     </div>
