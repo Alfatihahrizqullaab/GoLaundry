@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "../components/layout/landingComponent/rootLayout";
 import { DashboardLayout } from "../components/layout/ownerComponent/DashboardLayout";
 import { DashboardKasirLayout } from "../components/layout/kasirComponent/DashboardKasirLayout";
+import { DashboardAdminLayout } from "../components/layout/adminComponent/DashboardAdminLayout";
 
 import LandingPage from "../pages/LandingPage/LandingPage";
 
@@ -21,6 +22,10 @@ import { TagihanPage } from "../pages/Owner/TagihanPage/TagihanPage";
 
 import DashboardKasirPage from "../pages/Kasir/DashboardKasirPage/DashboardKasirPage";
 import TransaksiKasirPage from "../pages/Kasir/TransaksiKasirPage/TransaksiKasirPage";
+
+import DashboardKaryawanPage from "../pages/Karyawan/DashboardKasirPage/DashboardKasirPage";
+import DashboardAdminPage from "../pages/admin/DasboardAdminPage/DashboardAdminPage";
+
 // Import file ErrorPage jika kamu sudah membuatnya
 // import ErrorPage from "../components/ErrorPage/ErrorPage"; 
 
@@ -96,6 +101,24 @@ export const router = createBrowserRouter([
         path: "/kasir/transaksi",
         element: <TransaksiKasirPage />
       }
+    ]
+  },
+
+  {
+    path: "/DashboardKaryawan",
+    element: <DashboardKaryawanPage/>
+  },
+
+
+  // ADMIN
+  {
+    element:<DashboardAdminLayout/>,
+    children: [
+      {
+        path: "/admin/dashboard",
+        element: <DashboardAdminPage/>
+      }
+      
     ]
   }
   
