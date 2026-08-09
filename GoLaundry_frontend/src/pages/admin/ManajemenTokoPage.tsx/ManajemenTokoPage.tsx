@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { TokoToolbar } from '../../../features/adminLaundry/ManagementToko/Toolbar';
-import { TokoTable, type TokoData } from '../../../features/adminLaundry/ManagementToko/TableToko';
+import { TokoToolbar } from '../../../features/adminLaundry/ManajemenToko/Toolbar';
+import { TokoTable, type TokoData } from '../../../features/adminLaundry/ManajemenToko/TableToko';
 
 export const ManajemenTokoPage: React.FC = () => {
   // ATURAN PATEN: Jangan diubah, tetap ada

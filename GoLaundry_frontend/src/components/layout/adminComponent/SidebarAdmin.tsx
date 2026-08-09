@@ -7,7 +7,7 @@ export const SidebarAdmin: React.FC = () => {
 
   const menuPlatform = [
     { name: 'Dashboard Utama', path: '/admin/dashboard', icon: LayoutDashboard },
-    { name: 'Manajemen Toko', path: '/admin/toko', icon: Store, badge: 3 },
+    { name: 'Manajemen Toko', path: '/admin/managementToko', icon: Store, badge: 3 },
     { name: 'Owner & Customer', path: '/admin/users', icon: Users },
   ];
 

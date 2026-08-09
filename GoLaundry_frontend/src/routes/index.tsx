@@ -25,6 +25,7 @@ import TransaksiKasirPage from "../pages/Kasir/TransaksiKasirPage/TransaksiKasir
 
 import DashboardKaryawanPage from "../pages/Karyawan/DashboardKasirPage/DashboardKasirPage";
 import DashboardAdminPage from "../pages/admin/DasboardAdminPage/DashboardAdminPage";
+import ManajemenTokoPage from "../pages/admin/ManajemenTokoPage.tsx/ManajemenTokoPage";
 
 // Import file ErrorPage jika kamu sudah membuatnya
 // import ErrorPage from "../components/ErrorPage/ErrorPage"; 
@@ -117,6 +118,10 @@ export const router = createBrowserRouter([
       {
         path: "/admin/dashboard",
         element: <DashboardAdminPage/>
+      },
+      {
+        path: "/admin/managementToko",
+        element: <ManajemenTokoPage/>
       }
       
     ]
