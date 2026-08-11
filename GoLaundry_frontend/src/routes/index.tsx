@@ -29,6 +29,11 @@ import ManajemenTokoPage from "../pages/admin/ManajemenTokoPage.tsx/ManajemenTok
 import ManajemenCustomerPage from "../pages/admin/ManajementCustomer/ManajementCustomer";
 import ManajemenPaketPage from "../pages/admin/ManajemenPaketPage/ManajemenPaketPage";
 
+
+import { LoginKasirPage } from "../features/auth/LoginKasirPage";
+import { LoginKaryawanPage } from "../features/auth/LoginKaryawanPage";
+import { LoginAdminPage } from "../pages/Auth/LoginAdminPage";
+
 // Import file ErrorPage jika kamu sudah membuatnya
 // import ErrorPage from "../components/ErrorPage/ErrorPage"; 
 
@@ -135,6 +140,18 @@ export const router = createBrowserRouter([
       }
       
     ]
-  }
+  },
+  {
+    path: '/login-kasir',
+    element: <LoginKasirPage/>
+  },
+  {
+    path: '/login-karyawan',
+    element: <LoginKaryawanPage/>
+  },
+  {
+    path: '/login-admin',
+    element: <LoginAdminPage/>
+  },
   
 ]);
