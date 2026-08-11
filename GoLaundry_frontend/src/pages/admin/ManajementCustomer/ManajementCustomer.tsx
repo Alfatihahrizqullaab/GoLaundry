@@ -50,8 +50,8 @@ export const ManajemenCustomerPage: React.FC = () => {
   return (
     <div className="w-full max-w-7xl mx-auto">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-slate-800">Manajemen Owner & Customer</h2>
-        <p className="text-sm text-slate-500 mt-1">Kelola data pemilik toko dan pelanggan aplikasi</p>
+        <h2 className="text-xl md:text-2xl font-bold text-slate-800">Manajemen Owner & Customer</h2>
+        <p className="text-xs md:text-sm text-slate-500 mt-1">Kelola data pemilik toko dan pelanggan aplikasi</p>
       </div>
       
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">

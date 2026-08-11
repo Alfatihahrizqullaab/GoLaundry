@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { TokoToolbar } from '../../../features/adminLaundry/ManajemenToko/Toolbar';
 import { TokoTable, type TokoData } from '../../../features/adminLaundry/ManajemenToko/TableToko';
 
@@ -18,8 +18,8 @@ export const ManajemenTokoPage: React.FC = () => {
     { id: 'TK-003', namaToko: 'Tirta Bersih', owner: 'Susi S', kontak: '0898765432', tanggal: '15 Jan 2024', status: 'Nonaktif' },
   ]);
 
-  // Logika Aksi Kasir (Bisa dihubungkan ke API nanti)
-  const handleAksi = (id: string, aksi: string) => {
+  // Logika Aksi menggunakan useCallback agar React.memo di Tabel berfungsi
+  const handleAksi = useCallback((id: string, aksi: string) => {
     alert(`Melakukan aksi "${aksi}" pada toko ID: ${id}`);
     
     // Simulasi update state jika menyetujui toko
@@ -28,15 +28,17 @@ export const ManajemenTokoPage: React.FC = () => {
         toko.id === id ? { ...toko, status: 'Aktif' } : toko
       ));
     }
-  };
+  }, []);
 
-  // Logika Filter Data
-  const filteredToko = tokoList.filter((toko) => {
-    const matchStatus = statusFilter === 'Semua Status' || toko.status === statusFilter;
-    const matchSearch = toko.namaToko.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                        toko.owner.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchStatus && matchSearch;
-  });
+  // Logika Filter Data menggunakan useMemo agar ngebut
+  const filteredToko = useMemo(() => {
+    return tokoList.filter((toko) => {
+      const matchStatus = statusFilter === 'Semua Status' || toko.status === statusFilter;
+      const matchSearch = toko.namaToko.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          toko.owner.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchStatus && matchSearch;
+    });
+  }, [tokoList, statusFilter, searchQuery]);
 
   return (
     <div className="w-full max-w-7xl mx-auto">
@@ -51,7 +53,7 @@ export const ManajemenTokoPage: React.FC = () => {
           setSearchQuery={setSearchQuery}
         />
 
-        {/* Render Komponen Table */}
+        {/* Render Komponen Table / Card */}
         <TokoTable 
           data={filteredToko} 
           onAction={handleAksi} 
